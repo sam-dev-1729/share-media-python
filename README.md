@@ -1,6 +1,6 @@
 # karyar-python-projects-template
 
-Hello students and welcome.
+Hello dear students and welcome.
 To create your project, just simply [use this template](https://github.com/new?template_name=karyar-python-projects-template&template_owner=shywn-mrk).
 
 
