@@ -1,6 +1,4 @@
-Here is an explanation of the client-server file transfer code in README.md format:
-
-# Client-Server File Transfer
+# Share-Media Client-Server
 
 This is a simple client-server application for transferring files over a socket connection.
 
