@@ -4,7 +4,7 @@ This is a simple client-server application for transferring files over a socket 
 
 ## Client
 
-The client code is in `client.py`. 
+The client code is in `client.py`.
 
 It does the following:
 
@@ -17,7 +17,7 @@ It does the following:
 - Closes the socket
 - Gives option to download another file or exit
 
-## Server 
+## Server
 
 The server code is in `server.py`.
 
@@ -26,7 +26,7 @@ It does the following:
 - Creates a socket and binds it to a port
 - Gets a list of files in the `src/assets` folder
 - Accepts a connection from a client
-- Sends the list of file names concatenated with '-' to the client 
+- Sends the list of file names concatenated with '-' to the client
 - Receives the index of the file chosen by the client
 - Sends the file name to the client
 - Opens the file and sends 1024 byte chunks of the data to the client
@@ -41,7 +41,7 @@ Run the server code first:
 
 ```
 python server.py
-``` 
+```
 
 Then run the client code:
 
