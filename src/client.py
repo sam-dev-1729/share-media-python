@@ -1,4 +1,5 @@
 """Client."""
+import os
 import socket
 import tkinter as tk
 from tkinter import ttk
@@ -21,7 +22,20 @@ def connect_to_server():
         return
     decoded = data.decode().split("-")
     for item in decoded:
-        listbox.insert(tk.END, item)
+        if item != "":
+            listbox.insert(tk.END, os.path.basename(item))
+
+
+def popupmsg(msg, geometry="220x150"):
+    """Popup."""
+    popup = tk.Tk()
+    popup.geometry(geometry)
+    popup.wm_title("Notice!")
+    label = ttk.Label(popup, text=msg)
+    label.pack(side="top", fill="x", pady=20)
+    btn = ttk.Button(popup, text="Okay", command=popup.destroy)
+    btn.pack()
+    popup.mainloop()
 
 
 def download_file():
@@ -33,22 +47,34 @@ def download_file():
 
     sock.sendall(str(file_index).encode())
     recv_filename = sock.recv(1024).decode()
-    size = int(sock.recv(1024).decode())
-    received = 0
+    try:
+        size = int(sock.recv(1024).decode())
+        if size == -1:
+            raise FileNotFoundError
+        received = 0
+        # progress =ttk.Progressbar(orient='horizontal',
+        # maximum=100,length=300, mode='determinate')
+        # progress.pack()
+        download_path = os.path.join("src", "downloads", recv_filename)
+        # src = os.walk("src/downloads")
+        # for item in src:
+        #     for value in item[2]:
+        #         # print(idex)
+        #         if value == recv_filename:
+        #             popupmsg(f'you already download the
+        #                       {recv_filename} file')
+        #             break
 
-    with open(recv_filename, "wb") as file:
-        while received < size:
-            data = sock.recv(1024)
-            received += len(data)
-            file.write(data)
-    # with open(recv_filename, "wb") as file:
-    #     line = sock.recv(1024)
-    #     while line:
-    #         file.write(line)
-    #         line = sock.recv(1024)
-
-    # sock.close()
-    # listbox.delete(file_index)
+        with open(download_path, "wb") as file:
+            while received < size:
+                # progress['value'] = received / size * 100
+                # progress.place()
+                data = sock.recv(1024)
+                received += len(data)
+                file.write(data)
+        popupmsg(f"{recv_filename} downloaded successfully!")
+    except FileNotFoundError:
+        popupmsg(f"{recv_filename} not found!")
 
 
 def upload():
@@ -57,7 +83,7 @@ def upload():
 
 
 root = tk.Tk()
-
+root.geometry("350x350")
 notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
 
@@ -65,16 +91,19 @@ download_frame = ttk.Frame(notebook)
 notebook.add(download_frame, text="Download")
 
 lbl_download = ttk.Label(download_frame, text="Download File:")
+
 btn_download = ttk.Button(
     download_frame,
     text="Download",
     command=download_file,
 )
+
 listbox = tk.Listbox(download_frame)
 
 lbl_download.pack(pady=10)
 listbox.pack()
 btn_download.pack()
+
 
 connect_to_server()
 
