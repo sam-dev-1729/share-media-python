@@ -1,57 +1,52 @@
-# share-media-python
+# Client-Server File Transfer
 
-This project implements a simple client-server application for transferring files over a socket connection.
+Share-media-python is a simple client-server program for transferring files over a network. It consists of a client script and a server script that communicate over sockets. 
 
-## Overview
+## Client
 
-The project consists of a server script (`server.py`) and a client script (`client.py`). 
+The client does the following:
 
-The server sets up a listening socket on port 8800 and waits for incoming client connections. When a client connects, the server sends a list of available files and then allows the client to request a file by index. The server sends the requested file's contents over the socket connection.
+- Creates a socket and connects to the server
+- Requests the file list from the server and displays it in a Tkinter listbox
+- Allows the user to select a file and click the "Download" button
+- Sends the index of the selected file to the server
+- Receives the filename and size from the server
+- Writes the file contents received from the server to disk
+- Displays a message when the download is complete
 
-The client connects to the server socket and receives the list of available files. It displays this in a Tkinter GUI listbox. The user can select a file to download, which will trigger the client to request that file from the server and save it locally. The client also has an upload tab, which is unimplemented.
+The client handles some errors like:
 
-## Running
+- File not found on server
+- Already existing file
 
-To start the server:
+## Server 
 
-```
-python server.py
-``` 
+The server does the following:
 
-To run the client:
+- Creates a socket and listens for clients
+- Maintains a list of available files
+- Sends the file list when requested by client
+- Sends the file name and size when index received
+- Reads the file in chunks of 1024 bytes and sends to client
 
-```
-python client.py
-```
+The server handles some errors like:
 
-The client will connect to localhost:8800 by default.
+- File not found
 
-## Implementation
+## Usage
 
-### Server
+- Run the server script 
+- Run the client script
+- Client connects to server 
+- Client requests and displays file list
+- Client selects and downloads a file
 
-- Sets up a listening TCP socket on port 8800
-- Builds a list of available files by walking the `src/assets` folder 
-- Sends file list when client connects
-- Receives file index from client and sends back file contents
-- Spawns a thread to handle each client connection
+## Requirements
 
-### Client
+- Python 3
+- socket 
+- os
+- threading
+- Tkinter
 
-- Connects to server socket 
-- Receives file list and populates GUI listbox
-- Allows selecting file to download via listbox
-- Requests file from server by index and saves to local disk
-- Displays download progress with Tkinter progressbar
-- Has unimplemented upload tab
-
-## Next Steps
-
-Some potential improvements:
-
-- Implement file upload functionality
-- Improve threading and concurrency
-- Add option to select download location
-- Integrate with an existing GUI framework like Tkinter
-- Add authentication between client and server
-- Implement network optimizations like compression
+This simple client-server program demonstrates socket programming and file transfer in Python. Some improvements can be made like adding encryption, user authentication etc.
